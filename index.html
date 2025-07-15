@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carivio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+    }
+    .navbar {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .hashtag {
+      color: #008080;
+      font-weight: bold;
+    }
+    .nav-links {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .nav-links a, .nav-links span, .nav-links button {
+      text-decoration: none;
+      color: #008080;
+      font-weight: 500;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+    .course-search-section, .book-call, .hero, .career-cards, .trust-banner, .personalized-recommendations {
+      padding: 40px 20px;
+    }
+    .career-cards {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+      width: 280px;
+      text-align: center;
+    }
+    .card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .card h3 {
+      color: #008080;
+    }
+    .button-primary {
+      background: #008080;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .trust-banner ul {
+      list-style: none;
+      padding: 0;
+    }
+    .trust-banner li {
+      margin: 10px 0;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ NAVBAR -->
+  <header class="navbar">
+    <div class="logo-section">
+      <a href="/"><img src="../assets/CARIVIO_trpbg.png" width="150" alt="Carivio Logo"/></a>
+      <span class="hashtag">#ExploreWithCarivio</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="collages/collages.html">Colleges</a>
+      <a href="contact.html">Contact</a>
+      <span id="authSection">
+        <a href="admin/login.html" id="loginBtn">Login</a>
+      </span>
+    </nav>
+  </header>
+
+<!-- ✅ BOOK A CALL SECTION -->
+  <section class="book-call">
+    <div class="book-call-content">
+      <img src="../assets/bookacall.png" alt="Book Call" />
+      <div class="book-call-text">
+        <div class="no-spam-container">
+          <img src="../assets/no-spam-icon.png" alt="No Spam Icon" />
+          <span>No Spam Guarantee</span>
+        </div>
+        <h2>Confused About Your Career Path?</h2>
+        <p>Book a FREE 1-on-1 call with a certified career guide and get clarity in just 15 minutes.</p>
+        <a href="pages/book-a-call.html" class="button-primary">Book Your Free Call</a>
+      </div>
+    </div>
+  </section>
+
+
+<section class="college-carousel py-8 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-xl font-semibold mb-4 text-center text-gray-800">Explore Top Colleges</h2>
+    <div id="collegeLogoScroller" class="flex space-x-4 overflow-x-auto no-scrollbar p-2">
+      <!-- College logos will be injected here -->
+    </div>
+  </div>
+</section>
+
+<!-- 🔁 CAREER COURSE GRID SECTION -->
+<!-- ✅ EXPLORE CAREERS BY STREAM -->
+<section class="explore-section-wrapper">
+  <h2 class="explore-heading">Explore Careers by Stream</h2>
+
+  <div class="explore-section">
+
+    <!-- ✅ LEFT SIDEBAR FILTER PANEL -->
+    <aside class="filter-panel">
+      <h3 class="filter-heading">Filter by Stream</h3>
+      <ul class="filter-list">
+        <li><a href="/career/commerce.html">Commerce</a></li>
+        <li><a href="/career/science.html">Science</a></li>
+        <li><a href="/career/arts.html">Arts</a></li>
+      </ul>
+
+      <h3 class="filter-heading">Top Locations</h3>
+      <ul class="filter-list">
+        <li><a href="/collages/collages.html?city=Delhi">Delhi</a></li>
+        <li><a href="/collages/collages.html?city=Mumbai">Mumbai</a></li>
+        <li><a href="/collages/collages.html?city=Hyderabad">Hyderabad</a></li>
+      </ul>
+    </aside>
+
+    <!-- ✅ MAIN CONTENT AREA -->
+    <div class="explore-main-content">
+
+      <!-- 🎓 Course Category Section -->
+      <section class="course-categories">
+        <h2 class="section-title">🎓 Popular Course Categories</h2>
+        <div id="categoryGrid" class="category-grid"></div>
+      </section>
+
+      <!-- 🔍 Dynamic Career Cards -->
+      <section class="career-cards">
+        <div id="careerCardsContainer">
+          <!-- Cards will be dynamically injected here via Firebase -->
+        </div>
+      </section>
+
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- ✅ SEARCH SECTION -->
+ <section class="course-search-section">
+  <div class="course-search-wrapper">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="🔍 Search careers, courses, or colleges..." autocomplete="off" />
+      <ul id="suggestions" class="suggestions-list"></ul>
+    </div>
+    <button id="searchBtn">Search</button>
+  </div>
+</section>
+
+  <!-- ✅ PERSONALIZED SECTION -->
+  <section class="personalized-recommendations" id="personalizedSection" style="display: none;">
+  <div class="recommendations-header">
+    <h2>🎯 Recommended For You</h2>
+    <p id="personalMessage">Based on your interests and activity, here are the best-fit options just for you.</p>
+  </div>
+  <div class="career-cards-grid" id="personalizedCards">
+    <!-- Career cards will be dynamically injected here -->
+  </div>
+</section>
+
+
+
+  <!-- ✅ HERO SECTION -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Confused About What to Do After 10th or 12th?</h1>
+      <p>Carivio helps you compare careers, explore the best courses, and speak with real experts.</p>
+      <a href="compare.html" class="button-primary">Compare Now</a>
+    </div>
+  </section>
+
+  <!-- ✅ DEFAULT CAREERS -->
+  <section id="careerCardsSection" class="career-cards-section" style="padding: 60px 20px; background-color: #f9f9f9;">
+  <div class="container" style="max-width: 1200px; margin: auto;">
+    <h2 style="text-align: center; font-size: 32px; font-weight: 600; margin-bottom: 40px; color: #008080;">
+      Explore Careers by Stream
+    </h2>
+
+    <div id="careerCardsContainer" class="career-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+      <!-- Cards will be inserted here dynamically -->
+    </div>
+  </div>
+</section>
+
+  <!-- ✅ TRUST BANNER -->
+  <section class="trust-banner px-6 py-12 bg-gray-100 rounded-2xl shadow-md max-w-7xl mx-auto mt-16">
+  <div class="text-center mb-8">
+    <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Why 10,000+ Students Trust <span class="text-blue-600">Carivio</span></h2>
+    <p class="text-lg text-gray-600">Empowering India’s youth with data-driven career clarity and expert mentorship.</p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-8">
+    <!-- Card 1 -->
+    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition">
+      <div class="flex items-center space-x-4 mb-4">
+        <div class="bg-blue-100 p-3 rounded-full">
+          <img src="/assets/" alt="Personalized Icon" class="w-6 h-6" />
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800">Personalized Guidance</h3>
+      </div>
+      <p class="text-gray-600 text-sm">
+        AI-powered career recommendations tailored to your interests, strengths, and stream.
+      </p>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition">
+      <div class="flex items-center space-x-4 mb-4">
+        <div class="bg-green-100 p-3 rounded-full">
+          <img src="/assets/icons/experts.svg" alt="Experts Icon" class="w-6 h-6" />
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800">Counselor Support</h3>
+      </div>
+      <p class="text-gray-600 text-sm">
+        Backed by a network of certified career counselors and domain experts across India.
+      </p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition">
+      <div class="flex items-center space-x-4 mb-4">
+        <div class="bg-yellow-100 p-3 rounded-full">
+          <img src="/assets/icons/language.svg" alt="Languages Icon" class="w-6 h-6" />
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800">Multilingual Access</h3>
+      </div>
+      <p class="text-gray-600 text-sm">
+        Available in English, Hindi, and Telugu to reach students across regional and linguistic backgrounds.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+  <!-- ✅ FIREBASE + PERSONALIZATION SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    // import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app-check.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBVJMXI3zu1p84m-ocki1hFhA2P4R9nNFg",
+      authDomain: "carivioadmin.firebaseapp.com",
+      projectId: "carivioadmin",
+      storageBucket: "carivioadmin.appspot.com",
+      messagingSenderId: "534591240427",
+      appId: "1:534591240427:web:333c04a377d06ebfbce6ae",
+      measurementId: "G-D6RSZ95PQT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Optional: Enable AppCheck later
+    // const appCheck = initializeAppCheck(app, {
+    //   provider: new ReCaptchaV3Provider("your-public-recaptcha-site-key"),
+    //   isTokenAutoRefreshEnabled: true
+    // });
+
+    const authSection = document.getElementById("authSection");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const name = user.displayName || "User";
+       authSection.innerHTML = `
+  <span>Hi, ${name.split(" ")[0]}</span>
+  <a href="/admin/user-dashboard.html" style="margin-left:10px;">Dashboard</a>
+  <button onclick="logout()" class="logout-btn">Logout</button>
+`;
+
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+       if (userDoc.exists()) {
+  const data = userDoc.data();
+
+  const stream = data.stream || "General";
+  const city = data.city || "your city";
+  const interest = data.interest || "your interest";
+  const quizResult = data.quizResult || null;
+
+  document.getElementById("personalizedSection").style.display = "block";
+
+  // Create a personalized message
+  let message = `Based on your interest in ${stream}, location in ${city}, and preference for ${interest}, here are your suggestions:`;
+  if (quizResult) {
+    message += ` You were also recommended to explore: ${quizResult}.`;
+  }
+  document.getElementById("personalMessage").textContent = message;
+
+  // Create personalized cards
+  const cards = [];
+
+  cards.push(`
+    <div class="card">
+      <h3>${stream} Stream</h3>
+      <p>Explore top ${stream} career paths now.</p>
+      <a href="career/${stream.toLowerCase()}.html">View Careers</a>
+    </div>
+  `);
+
+  cards.push(`
+    <div class="card">
+      <h3>Colleges in ${city}</h3>
+      <p>Find the best options near you.</p>
+      <a href="collages/collages.html?city=${city}">View Colleges</a>
+    </div>
+  `);
+
+  if (quizResult) {
+    cards.push(`
+      <div class="card">
+        <h3>Recommended: ${quizResult}</h3>
+        <p>Based on your quiz, this might be a great fit!</p>
+        <a href="career/${quizResult.toLowerCase().replace(/\s+/g, "-")}.html">Learn More</a>
+      </div>
+    `);
+  }
+
+  document.getElementById("personalizedCards").innerHTML = cards.join("");
+}
+
+    
+      }
+    });
+
+ // AUTO-LOAD CAREER CARDS ON HOMEPAGE
+const careerCardsContainer = document.getElementById("careerCardsContainer");
+
+if (careerCardsContainer) {
+  const careerSnap = await getDocs(collection(db, "careers"));
+  careerSnap.forEach(docSnap => {
+    const data = docSnap.data();
+
+    const card = document.createElement("div");
+    card.className = "career-card";
+    card.style = `
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+    `;
+
+    card.innerHTML = `
+      <img src="${data.imageUrl || './assets/placeholder.jpg'}" alt="${data.name}" style="width: 100%; height: 180px; object-fit: cover;">
+      <div style="padding: 20px;">
+        <h3 style="font-size: 22px; color: #333;">${data.name}</h3>
+        <p style="font-size: 15px; color: #666; margin: 10px 0 20px;">${data.shortDescription || "Explore top careers in this field."}</p>
+        <a href="career/${data.slug || docSnap.id}.html" 
+           style="color: #fff; background-color: #008080; padding: 10px 16px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+          Explore
+        </a>
+      </div>
+    `;
+
+    careerCardsContainer.appendChild(card);
+  });
+}
+   
+// ✅ LOAD COLLEGE LOGOS DYNAMICALLY
+const collegeLogoScroller = document.getElementById("collegeLogoScroller");
+if (collegeLogoScroller) {
+  const collegeSnap = await getDocs(collection(db, "colleges"));
+  collegeSnap.forEach(doc => {
+    const data = doc.data();
+    if (data.logoUrl && data.blogUrl) {
+      const logoEl = document.createElement("a");
+      logoEl.href = data.blogUrl;
+      logoEl.target = "_blank";
+      logoEl.innerHTML = `
+        <img src="${data.logoUrl}" alt="${data.name}" 
+             style="height: 60px; width: auto; object-fit: contain; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: transform 0.2s ease-in-out;"
+             onmouseover="this.style.transform='scale(1.05)'" 
+             onmouseout="this.style.transform='scale(1)'"
+        />
+      `;
+      collegeLogoScroller.appendChild(logoEl);
+    }
+  });
+}
+
+
+    window.logout = () => {
+      signOut(auth).then(() => window.location.reload());
+    };
+
+
+(async () => {
+  
+  const categoryGrid = document.getElementById("categoryGrid");
+  if (categoryGrid) {
+    const categorySnap = await getDocs(collection(db, "courseCategories"));
+    let html = "";
+    categorySnap.forEach(doc => {
+      const data = doc.data();
+      html += `
+        <div class="category-icon">
+          <a href="${data.redirectUrl}" target="_blank">
+            <div class="icon-wrapper">
+              <img src="${data.imageUrl}" alt="${data.title}" />
+            </div>
+            <span class="category-label">${data.title}</span>
+          </a>
+        </div>
+      `;
+      console.log("Fetching course categories...");
+console.log("Document data:", data);
+    });
+    categoryGrid.innerHTML = html || "<p>No course categories found.</p>";
+  }
+})();
+
+// College Logo Scroller
+const logoTrack = document.getElementById("collegeLogoTrack");
+
+async function loadCollegeLogos() {
+  const querySnapshot = await getDocs(collection(db, "colleges"));
+  let html = "";
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    if (data.logoUrl && data.blogUrl) {
+      html += `<img src="${data.logoUrl}" alt="${data.name}" onclick="window.open('${data.blogUrl}', '_blank')" />`;
+    }
+  });
+
+  // Inject logos
+  logoTrack.innerHTML = html + html; // Duplicate for continuous scroll
+}
+
+loadCollegeLogos();
+
+  </script>
+<!-- Dialogflow Messenger Embed -->
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<df-messenger
+  intent="WELCOME"
+  chat-title="Carivio Bot"
+  agent-id="659797a8-c8cf-4a1b-9936-b44e079b4f47"
+  language-code="en"
+></df-messenger>
+
+
+<script>
+  const searchInput = document.getElementById("searchInput");
+  const suggestionsBox = document.getElementById("suggestions");
+
+  const dataSet = [
+    "BBA in Hyderabad",
+    "BBA after 12th Commerce",
+    "B.Tech Computer Science",
+    "B.Sc Agriculture",
+    "Career in Law after 12th",
+    "Career in AI",
+    "Top Colleges in Mumbai",
+    "Colleges for Psychology",
+    "Courses after 10th",
+    "Courses after 12th Science",
+    "Commerce + CA",
+    "Best colleges for MBA"
+    // Add more combinations as needed
+  ];
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    const filtered = dataSet.filter(item =>
+      item.toLowerCase().includes(query)
+    );
+
+    renderSuggestions(filtered);
+  });
+
+  function renderSuggestions(items) {
+    suggestionsBox.innerHTML = "";
+
+    if (items.length === 0 || searchInput.value.trim() === "") {
+      suggestionsBox.style.display = "none";
+      return;
+    }
+
+    suggestionsBox.style.display = "block";
+    items.slice(0, 10).forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      li.addEventListener("click", () => {
+        searchInput.value = item;
+        suggestionsBox.innerHTML = "";
+        suggestionsBox.style.display = "none";
+      });
+      suggestionsBox.appendChild(li);
+    });
+  }
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".search-bar")) {
+      suggestionsBox.style.display = "none";
+    }
+  });
+
+document.getElementById("searchBtn").addEventListener("click", () => {
+  const query = searchInput.value.trim();
+  if (query) {
+    window.location.href = `search-results.html?q=${encodeURIComponent(query)}`;
+  }
+});
+
+// Firebase Firestore + User Preferences (future integration)
+const userInterest = ["Commerce", "Finance"];
+const city = "Hyderabad";
+const personalizedCombos = userInterest.map(i => `${i} in ${city}`);
+
+
+</script>
+
+
+<script>
+// Wait for DOM to fully load
+window.addEventListener("DOMContentLoaded", () => {
+  const observer = new MutationObserver(() => {
+    const chatButton = document.querySelector('df-messenger').shadowRoot?.querySelector('df-messenger-button');
+
+    if (chatButton && !chatButton.classList.contains('shake')) {
+      chatButton.classList.add('shake');
+
+      // Remove shake on click
+      chatButton.addEventListener('click', () => {
+        chatButton.classList.remove('shake');
+      });
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+});
+
+</script>
+
+
+
+<style>
+@keyframes vibrate {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-1px, 0); }
+  40% { transform: translate(1px, 0); }
+  60% { transform: translate(-1px, 0); }
+  80% { transform: translate(1px, 0); }
+}
+
+.shake {
+  animation: vibrate 0.3s infinite;
+}
+</style>
+
+
+</body>
+</html>
