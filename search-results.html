@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Search Results – Carivio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <nav class="navbar">
+    <div class="logo-section">
+      <a href="/"><img src="../assets/CARIVIO_trpbg.png" width="150" alt="Carivio Logo" /></a>
+      <span class="hashtag">#ExploreWithCarivio</span>
+    </div>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+    </div>
+  </nav>
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      padding: 40px 20px;
+      background-color: #f9f9f9;
+    }
+
+    .results-section {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .result-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    .result-card h3 {
+      margin-bottom: 10px;
+      color: #008080;
+    }
+
+    .result-card p {
+      color: #444;
+    }
+
+    .no-results {
+      font-size: 1.1rem;
+      color: #cc0000;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="max-width: 800px; margin: auto; margin-bottom: 20px;">
+  <label for="streamFilter" style="font-weight: 600;">Filter by Stream:</label>
+  <select id="streamFilter" style="padding: 8px; font-family: 'Quicksand'; margin-left: 10px;">
+    <option value="">All</option>
+    <option value="Commerce">Commerce</option>
+    <option value="Science">Science</option>
+    <option value="Arts">Arts</option>
+  </select>
+</div>
+
+
+
+  <section class="results-section">
+    <h2 id="resultsTitle">Search Results</h2>
+    <div id="resultsContainer"></div>
+  </section>
+
+  <script>
+  const allData = [
+    {
+      name: "Chartered Accountant (CA)",
+      desc: "A prestigious accounting career involving auditing, taxation, and corporate finance.",
+      url: "careers/ca.html",
+      stream: "Commerce"
+    },
+    {
+      name: "B.Com General",
+      desc: "A foundational commerce degree for careers in finance, business, and accounting.",
+      url: "careers/bcom-general.html",
+      stream: "Commerce"
+    },
+    {
+      name: "BBA – Management",
+      desc: "An undergraduate program focused on business, leadership, and entrepreneurship.",
+      url: "careers/bba.html",
+      stream: "Commerce"
+    },
+    {
+      name: "MBBS – Medicine",
+      desc: "A professional medical course for those who want to become licensed doctors.",
+      url: "careers/mbbs.html",
+      stream: "Science"
+    }
+  ];
+
+  const resultsContainer = document.getElementById("resultsContainer");
+  const streamFilter = document.getElementById("streamFilter");
+
+  const normalize = str => str.toLowerCase().replace(/\s+/g, '');
+
+  function renderResults() {
+    const query = new URLSearchParams(window.location.search).get("q") || "";
+    const selectedStream = streamFilter.value;
+
+    document.getElementById("resultsTitle").textContent = `Search Results for "${query}"`;
+
+    const found = allData.filter(item => {
+      const matchesQuery = normalize(item.name).includes(normalize(query));
+      const matchesStream = !selectedStream || item.stream === selectedStream;
+      return matchesQuery && matchesStream;
+    });
+
+    resultsContainer.innerHTML = ""; // Clear existing
+
+    if (found.length === 0) {
+      resultsContainer.innerHTML = `<p class="no-results">No results found for "${query}".</p>`;
+    } else {
+      found.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "result-card";
+        card.innerHTML = `
+          <a href="${item.url}" style="text-decoration:none; color:inherit;">
+            <h3>${item.name}</h3>
+            <p>${item.desc}</p>
+          </a>
+        `;
+        resultsContainer.appendChild(card);
+      });
+    }
+  }
+
+  streamFilter.addEventListener("change", renderResults);
+  window.addEventListener("DOMContentLoaded", renderResults);
+</script>
+
+</body>
+</html>

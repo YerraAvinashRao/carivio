@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Compare – Carivio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #f5f7f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #008080;
+    }
+
+    .form-group {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .form-group select {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      min-width: 200px;
+    }
+
+    .compare-btn {
+      padding: 10px 20px;
+      background-color: #008080;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .comparison-result {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .box {
+      flex: 1 1 45%;
+      background-color: #fdfdfd;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .box h3 {
+      color: #008080;
+      margin-top: 0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      padding: 10px 30px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .hashtag {
+      font-weight: bold;
+      color: #008080;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #008080;
+      font-weight: 600;
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Navbar -->
+  <nav class="navbar">
+    <div class="logo-section">
+      <a href="/"><img src="../assets/CARIVIO_trpbg.png" width="150" alt="Carivio Logo" /></a>
+      <span class="hashtag">#ExploreWithCarivio</span>
+    </div>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+    </div>
+  </nav>
+
+  <!-- ✅ Main Compare Section -->
+  <div class="container">
+    <h1>Compare Smarter</h1>
+    <form id="compareForm">
+      <div class="form-group">
+        <select id="typeSelect">
+          <option value="">Select Comparison Type</option>
+          <option value="careers">Career vs Career</option>
+          <option value="courses">Course vs Course</option>
+          <option value="colleges">College vs College</option>
+        </select>
+
+        <select id="firstSelect" disabled></select>
+        <select id="secondSelect" disabled></select>
+
+        <button type="submit" class="compare-btn">Compare</button>
+      </div>
+    </form>
+
+    <div id="comparisonResult" class="comparison-result"></div>
+  </div>
+
+  <!-- ✅ Firebase Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBVJMXI3zu1p84m-ocki1hFhA2P4R9nNFg",
+      authDomain: "carivioadmin.firebaseapp.com",
+      projectId: "carivioadmin",
+      storageBucket: "carivioadmin.appspot.com",
+      messagingSenderId: "534591240427",
+      appId: "1:534591240427:web:333c04a377d06ebfbce6ae",
+      measurementId: "G-D6RSZ95PQT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const typeSelect = document.getElementById("typeSelect");
+    const firstSelect = document.getElementById("firstSelect");
+    const secondSelect = document.getElementById("secondSelect");
+    const comparisonResult = document.getElementById("comparisonResult");
+
+    typeSelect.addEventListener("change", async () => {
+      const type = typeSelect.value;
+      firstSelect.innerHTML = "<option value=''>Select First</option>";
+      secondSelect.innerHTML = "<option value=''>Select Second</option>";
+      firstSelect.disabled = secondSelect.disabled = true;
+      if (!type) return;
+
+      const data = await getDocs(collection(db, type));
+      data.forEach(docSnap => {
+        const data = docSnap.data();
+        const option = new Option(data.name || docSnap.id, docSnap.id);
+        firstSelect.appendChild(option.cloneNode(true));
+        secondSelect.appendChild(option.cloneNode(true));
+      });
+
+      firstSelect.disabled = secondSelect.disabled = false;
+    });
+
+    document.getElementById("compareForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const type = typeSelect.value;
+      const id1 = firstSelect.value;
+      const id2 = secondSelect.value;
+
+      if (!type || !id1 || !id2) {
+        comparisonResult.innerHTML = "<p style='color:red;'>Please select valid options.</p>";
+        return;
+      }
+
+      const [snap1, snap2] = await Promise.all([
+        getDoc(doc(db, type, id1)),
+        getDoc(doc(db, type, id2))
+      ]);
+
+      const data1 = snap1.exists() ? snap1.data() : null;
+      const data2 = snap2.exists() ? snap2.data() : null;
+
+      if (!data1 || !data2) {
+        comparisonResult.innerHTML = "<p style='color:red;'>Some data couldn't be found.</p>";
+        return;
+      }
+
+      let formatComparison = (data) => {
+        if (type === "careers") {
+          return `
+            <div class="box">
+              <h3>${data.name}</h3>
+              <p>${data.description || 'No description'}</p>
+              <p><strong>Avg. Salary:</strong> ${data.averageSalary || 'N/A'}</p>
+            </div>`;
+        } else if (type === "courses") {
+          return `
+            <div class="box">
+              <h3>${data.name}</h3>
+              <p><strong>Duration:</strong> ${data.duration || 'N/A'}</p>
+              <p><strong>Linked Career:</strong> ${data.linkedCareer || 'N/A'}</p>
+            </div>`;
+        } else if (type === "colleges") {
+          return `
+            <div class="box">
+              <h3>${data.name}</h3>
+              <p><strong>City:</strong> ${data.city || 'N/A'}</p>
+              <p><strong>Stream:</strong> ${data.stream || 'N/A'}</p>
+              <p><strong>Overview:</strong> ${data.overview || 'Not available'}</p>
+              ${data.logoUrl ? `<img src="${data.logoUrl}" width="100" style="border-radius:8px;">` : ''}
+            </div>`;
+        }
+        return `<div class="box"><p>Unsupported type</p></div>`;
+      };
+
+      comparisonResult.innerHTML = `
+        ${formatComparison(data1)}
+        ${formatComparison(data2)}
+      `;
+    });
+  </script>
+</body>
+</html>

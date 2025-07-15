@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Career Quiz – Carivio</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="quiz.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo-section">
+      <a href="/"><img src="../assets/CARIVIO_trpbg.png" width="150" alt="Carivio Logo" /></a>
+      <span class="hashtag">#ExploreWithCarivio</span>
+    </div>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+    </div>
+  </nav>
+
+  <div class="quiz-container">
+    <div class="progress-wrapper">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <h2 id="quizTitle">Career Quiz</h2>
+    <form id="quizForm">
+      <!-- Quiz questions dynamically inserted via JS -->
+    </form>
+
+    <div class="result" id="quizResult"></div>
+  </div>
+
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import {
+    getAuth,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc
+  } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const firebaseConfig = {
+      apiKey: "AIzaSyBVJMXI3zu1p84m-ocki1hFhA2P4R9nNFg",
+      authDomain: "carivioadmin.firebaseapp.com",
+      projectId: "carivioadmin",
+      storageBucket: "carivioadmin.appspot.com",
+      messagingSenderId: "534591240427",
+      appId: "1:534591240427:web:333c04a377d06ebfbce6ae",
+      measurementId: "G-D6RSZ95PQT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const quizForm = document.getElementById('quizForm');
+    const quizResult = document.getElementById('quizResult');
+    const progressBar = document.getElementById('progressBar');
+    const quizTitle = document.getElementById('quizTitle');
+
+    const questions = [
+      {
+        q: "Which subject do you enjoy the most?",
+        name: "q1",
+        options: ["Commerce", "Science", "Arts", "Computers/Tech", "None"]
+      },
+      {
+        q: "How do you prefer to learn?",
+        name: "q2",
+        options: ["Through real-life practice", "Through theory and textbooks", "By observing and experimenting", "By visual/audio media", "Through teamwork or discussion"]
+      },
+      {
+        q: "What kind of tasks do you enjoy most?",
+        name: "q3",
+        options: ["Analyzing numbers and solving problems", "Helping others or healing", "Designing, creating, or storytelling", "Leading teams or organizing things", "Working with machines or code"]
+      },
+      {
+        q: "What matters most in your career?",
+        name: "q4",
+        options: ["Financial stability", "Respect and recognition", "Making an impact", "Creative freedom", "Job security"]
+      },
+      {
+        q: "How comfortable are you with long study durations (4+ years)?",
+        name: "q5",
+        options: ["Very comfortable", "Somewhat okay", "Prefer shorter paths (1–3 years)"]
+      },
+      {
+        q: "What kind of workplace appeals to you?",
+        name: "q6",
+        options: ["Corporate office", "Hospital or clinic", "Courtroom", "Studio, stage or set", "Tech lab or startup"]
+      },
+      {
+        q: "Which of these would excite you most?",
+        name: "q7",
+        options: ["Managing money and investments", "Performing surgeries or treating patients", "Building an app or AI tool", "Arguing a legal case", "Creating a viral social media campaign"]
+      }
+    ];
+
+    let currentStep = 0;
+    const answers = {};
+
+    function renderQuestion(index) {
+      quizForm.innerHTML = "";
+      const q = questions[index];
+      const wrapper = document.createElement("div");
+      wrapper.className = "question active";
+      wrapper.dataset.step = index + 1;
+
+      wrapper.innerHTML = `
+        <h3>${index + 1}. ${q.q}</h3>
+        <div class="options">
+          ${q.options.map(opt => `
+            <label><input type="radio" name="${q.name}" value="${opt}" required> ${opt}</label>
+          `).join('')}
+        </div>
+        <button type="button" class="btn">${index === questions.length - 1 ? 'Get Result' : 'Next'}</button>
+      `;
+
+      quizForm.appendChild(wrapper);
+
+      wrapper.querySelector(".btn").addEventListener("click", () => {
+        const selected = wrapper.querySelector("input[type='radio']:checked");
+        if (!selected) {
+          alert("Please select an option to proceed.");
+          return;
+        }
+        answers[q.name] = selected.value;
+
+        if (index < questions.length - 1) {
+          currentStep++;
+          updateProgressBar();
+          renderQuestion(currentStep);
+        } else {
+          showResult();
+        }
+      });
+    }
+
+    function updateProgressBar() {
+      progressBar.style.width = `${((currentStep + 1) / questions.length) * 100}%`;
+    }
+
+    async function showResult() {
+      quizForm.style.display = "none";
+      quizTitle.textContent = "Your Career Recommendation";
+      quizResult.classList.add("active");
+
+      // Logic
+      const scoreMap = {
+        commerce: 0,
+        science: 0,
+        arts: 0,
+        tech: 0,
+        vocational: 0
+      };
+
+      if (answers.q1 === "Commerce") scoreMap.commerce++;
+      if (answers.q1 === "Science") scoreMap.science++;
+      if (answers.q1 === "Arts") scoreMap.arts++;
+      if (answers.q1 === "Computers/Tech") scoreMap.tech++;
+      if (answers.q1 === "None") scoreMap.vocational++;
+
+      if (answers.q3.includes("code")) scoreMap.tech++;
+      if (answers.q3.includes("creating") || answers.q7.includes("social media")) scoreMap.arts++;
+      if (answers.q3.includes("analyzing") || answers.q7.includes("money")) scoreMap.commerce++;
+      if (answers.q3.includes("healing") || answers.q7.includes("surgery")) scoreMap.science++;
+      if (answers.q7.includes("legal")) scoreMap.arts++;
+
+      const best = Object.entries(scoreMap).sort((a, b) => b[1] - a[1])[0][0];
+      let recommendation = "Chartered Accountant (CA)";
+      if (best === "science") recommendation = "Doctor (MBBS)";
+      if (best === "arts") recommendation = "Journalist";
+      if (best === "tech") recommendation = "App Developer";
+      if (best === "vocational") recommendation = "Hotel Management";
+
+      quizResult.innerHTML = `
+        <p style="font-size: 1.2rem;">Based on your answers, we recommend:</p>
+        <h3>${recommendation}</h3>
+        <a class="btn" href="../admin/user-dashboard.html">Go to Your Dashboard</a>
+      `;
+
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        await setDoc(userRef, { quizResult: recommendation }, { merge: true });
+      } else {
+        console.warn("User not logged in; quiz result not saved.");
+      }
+    }
+
+    // Launch quiz
+    renderQuestion(currentStep);
+    updateProgressBar();
+  });
+</script>
+
+</body>
+</html>
